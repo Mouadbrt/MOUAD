@@ -241,10 +241,17 @@ export default function Hero() {
         {/* portrait, anchored to the bottom, the giant wordmark showing behind it.
             Below `sm` the box is auto-height (width-driven, matching the photo's
             own aspect ratio) so the entire image stays visible, never cropped —
-            sm and up keep the original fixed-height, object-cover box untouched. */}
+            sm and up keep the original fixed-height, object-cover box untouched.
+            That auto-height also means it can no longer stay pinned to `bottom-0`
+            on mobile: the box is much shorter now, and bottom-anchoring it inside
+            a full-`100svh` section stranded it far below the wordmark with a big
+            empty gap between them. Anchoring from `top` instead (right under the
+            wordmark) below `sm` keeps title and portrait reading as one
+            composition; any leftover space lands below the portrait instead,
+            which is just normal hero breathing room, not a gap in the middle. */}
         <div
           ref={portraitWrapRef}
-          className="absolute z-10 left-1/2 -translate-x-1/2 bottom-0 h-auto sm:h-[76%] md:h-[84%] w-[84%] sm:w-[64%] md:w-[46%] max-w-xl"
+          className="absolute z-10 left-1/2 -translate-x-1/2 top-[27%] sm:top-auto sm:bottom-0 h-auto sm:h-[76%] md:h-[84%] w-[84%] sm:w-[64%] md:w-[46%] max-w-xl"
         >
           <div className="relative w-full h-auto sm:h-full">
             <Portrait t={t} />
