@@ -189,15 +189,13 @@ export default function Hero() {
     // room for the Hero to stay stuck in place while its layers transition).
     // At scroll position 0, or under reduced motion, this is visually a
     // no-op: no extra height, no sticky, the section renders exactly as
-    // before. That reserved extra room sits below the section as blank
-    // space until it's scrolled through, so on mobile — where the section
-    // itself is now content-sized instead of a forced `100svh` — it's kept
-    // small (`8vh`, matching the scroll-exit's already-reduced 0.45
-    // intensity below) instead of the original `24vh`, so it reads as a
-    // normal transition into the next section rather than another empty
-    // gap under the portrait. `sm`/`md` keep their original values.
-    <div ref={pinRef} className={reduced ? undefined : "relative h-[calc(15.75rem+84vw+8vh)] sm:h-[calc(100svh+24vh)] md:h-[calc(100svh+32vh)]"}>
-      <section id="hero" className={`w-full min-h-[calc(15.75rem+84vw)] sm:min-h-[100svh] overflow-hidden bg-putty ${reduced ? "relative" : "sticky top-0"}`}>
+    // before. Mobile's extra room is a small fixed amount (not `vh`-scaled
+    // like sm/md) — the section below it is already content-sized rather
+    // than viewport-filling, so a `vh`-scaled add-on here would reintroduce
+    // a growing blank gap under the portrait on tall phones; `sm`/`md` are
+    // unchanged.
+    <div ref={pinRef} className={reduced ? undefined : "relative h-[calc(18.5rem+84vw+3rem)] sm:h-[calc(100svh+24vh)] md:h-[calc(100svh+32vh)]"}>
+      <section id="hero" className={`w-full min-h-[calc(18.5rem+84vw)] sm:min-h-[100svh] overflow-hidden bg-putty ${reduced ? "relative" : "sticky top-0"}`}>
         <MobileMenu open={menuOpen} onClose={() => setMenuOpen(false)} navLeft={navLeft} navRight={navRight} t={t} />
         {/* giant name wordmark — the page's own logo, filling the width */}
         <span
@@ -249,23 +247,21 @@ export default function Hero() {
             own aspect ratio) so the entire image stays visible, never cropped —
             sm and up keep the original fixed-height, object-cover box untouched.
 
-            Below `sm`, the whole composition is content-driven instead of
-            forced into a full-viewport section: the wordmark's font-size is
-            already clamped to its 6rem floor at every mobile width (`19vw`
-            only overtakes `6rem` past the `sm` breakpoint), so its own
-            rendered height is effectively constant on mobile — and the
-            portrait's width (and therefore its auto height, since it's
-            square) is purely a function of viewport width, not height. That
-            makes `top-[12.5rem]` (clearing the wordmark) plus the section's
-            `min-h-[calc(15.75rem+84vw)]` (wordmark clearance + portrait's own
-            `84vw`-driven height + a fixed breathing margin) a true structural
-            fit rather than a viewport-height guess: it holds a consistent,
-            small gap above AND below the portrait across phone heights,
-            instead of stretching a leftover gap to fill whatever `100svh`
-            happens to be on a given device. `sm` and up are untouched. */}
+            Below `sm` the whole composition is content-sized instead of forced
+            into a full `100svh` section. The source photo is square, so its
+            rendered height is purely `84vw` (width-driven), independent of the
+            phone's height — a fixed `top` offset (clearing the wordmark, whose
+            own font-size is pinned at its `6rem` floor everywhere below `sm`)
+            plus that `84vw` box height plus a small fixed margin is exactly
+            the section's `min-h` below. That keeps a small, constant gap
+            above AND below the portrait on every phone — short phones just
+            end up with a shorter section (the next one starts sooner), tall
+            phones a taller one — instead of stretching a leftover gap to
+            fill whatever `100svh` happens to be. `sm` and up are untouched
+            (still the original bottom-anchored, viewport-filling box). */}
         <div
           ref={portraitWrapRef}
-          className="absolute z-10 left-1/2 -translate-x-1/2 top-[12.5rem] sm:top-auto sm:bottom-0 h-auto sm:h-[76%] md:h-[84%] w-[84%] sm:w-[64%] md:w-[46%] max-w-xl"
+          className="absolute z-10 left-1/2 -translate-x-1/2 top-[16.75rem] sm:top-auto sm:bottom-0 h-auto sm:h-[76%] md:h-[84%] w-[84%] sm:w-[64%] md:w-[46%] max-w-xl"
         >
           <div className="relative w-full h-auto sm:h-full">
             <Portrait t={t} />
