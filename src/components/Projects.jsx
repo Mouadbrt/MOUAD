@@ -1,4 +1,5 @@
 import React from "react";
+import { ArrowRight } from "lucide-react";
 import { Eyebrow } from "./Ui.jsx";
 import Reveal from "./Reveal.jsx";
 import RevealText from "./motion/RevealText.jsx";
@@ -21,6 +22,15 @@ export default function Projects() {
             {t.projects.titleLine2}
           </RevealText>
           <p className="mt-4 max-w-lg text-paper/60">{t.projects.subtitle}</p>
+
+          {/* Mobile-only nudge — the horizontal scroll itself is unchanged,
+              this just makes the affordance obvious on touch screens where
+              nothing else hints at it (desktop/tablet already show a peek
+              of the next card). */}
+          <p className="sm:hidden mt-3 flex items-center gap-1.5 text-xs text-paper/50">
+            {t.projects.scrollHint}
+            <ArrowRight size={14} className="shrink-0" />
+          </p>
         </Reveal>
 
         {/* each card owns its own container→image→title→meta reveal

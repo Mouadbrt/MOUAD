@@ -110,6 +110,7 @@
     "titleLine1": "Built to last,",
     "titleLine2": "made to perform",
     "subtitle": "From showcase sites to a complete Web GIS platform, here's an overview of what I've delivered.",
+    "scrollHint": "Scroll right to see other projects",
     "items": [
       { "tag": "Web GIS", "desc": "A Web GIS platform for visualizing and managing Meknès's geographic data — administrative offices, municipalities, schools, and health centers, with authentication and user management." },
       { "tag": "Website", "desc": "Modern, responsive website presenting the company's activity and products, with SEO structure and online deployment." },

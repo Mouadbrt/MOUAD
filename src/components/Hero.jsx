@@ -64,8 +64,11 @@ function MobileMenu({ open, onClose, navLeft, navRight, t }) {
 function Portrait({ t }) {
   const [failed, setFailed] = useState(false);
   if (failed) {
+    // Not a photo, so there's nothing to preserve an aspect ratio for —
+    // keeps its own minimum height so it doesn't collapse to near-nothing
+    // now that the wrapper around it is auto-height on mobile (see below).
     return (
-      <div className="w-full h-full rounded-t-[3rem] bg-putty-card border border-ink/10 flex flex-col items-center justify-end gap-3 pb-10 text-center px-6">
+      <div className="w-full h-full min-h-[280px] rounded-t-[3rem] bg-putty-card border border-ink/10 flex flex-col items-center justify-end gap-3 pb-10 text-center px-6">
         <ImageOff size={28} className="text-ink/60" />
         <p className="font-display text-xs font-semibold uppercase tracking-widest text-ink/70">{t.hero.addPhoto}</p>
         <p className="text-[11px] text-ink/70 max-w-[220px]">{t.hero.dropPhoto}</p>
@@ -77,7 +80,10 @@ function Portrait({ t }) {
       src="/assets/portrait.png"
       alt={profile.name}
       onError={() => setFailed(true)}
-      className="w-full h-full object-cover object-top rounded-t-[3rem]"
+      // Mobile: width-driven, height auto, object-contain — the whole photo
+      // stays visible, never cropped, matching whatever aspect ratio it
+      // actually has. sm+ (unchanged): fixed-height box, object-cover.
+      className="w-full h-auto sm:h-full object-contain sm:object-cover object-top rounded-t-[3rem]"
     />
   );
 }
@@ -232,9 +238,15 @@ export default function Hero() {
           </div>
         </nav>
 
-        {/* portrait, anchored to the bottom, the giant wordmark showing behind it */}
-        <div ref={portraitWrapRef} className="absolute z-10 left-1/2 -translate-x-1/2 bottom-0 h-[76%] md:h-[84%] w-[84%] sm:w-[64%] md:w-[46%] max-w-xl">
-          <div className="relative w-full h-full">
+        {/* portrait, anchored to the bottom, the giant wordmark showing behind it.
+            Below `sm` the box is auto-height (width-driven, matching the photo's
+            own aspect ratio) so the entire image stays visible, never cropped —
+            sm and up keep the original fixed-height, object-cover box untouched. */}
+        <div
+          ref={portraitWrapRef}
+          className="absolute z-10 left-1/2 -translate-x-1/2 bottom-0 h-auto sm:h-[76%] md:h-[84%] w-[84%] sm:w-[64%] md:w-[46%] max-w-xl"
+        >
+          <div className="relative w-full h-auto sm:h-full">
             <Portrait t={t} />
           </div>
         </div>

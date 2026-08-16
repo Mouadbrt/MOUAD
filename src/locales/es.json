@@ -110,6 +110,7 @@
     "titleLine1": "Construido para durar,",
     "titleLine2": "hecho para rendir",
     "subtitle": "Del sitio vitrina a la plataforma Web GIS completa, aquí tienes un vistazo de lo que he entregado.",
+    "scrollHint": "Desliza hacia la derecha para ver los demás proyectos",
     "items": [
       { "tag": "Web GIS", "desc": "Plataforma Web GIS de visualización y gestión de datos geográficos de Meknès — dependencias administrativas, municipios, escuelas y centros de salud, con autenticación y gestión de usuarios." },
       { "tag": "Sitio web", "desc": "Sitio web moderno y responsivo que presenta la actividad y los productos de la empresa, con estructura SEO y despliegue en línea." },
