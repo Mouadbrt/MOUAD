@@ -1,0 +1,70 @@
+.page-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Hard-coded to match putty.DEFAULT — see the same note in src/index.css:
+     Tailwind's theme() helper is unreliable for nested color objects under
+     `vite dev`. */
+  background: #eef2f7;
+  transition: opacity 0.5s var(--ease-premium, cubic-bezier(0.16, 1, 0.3, 1));
+}
+
+.page-loader--leaving {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.page-loader__fan {
+  position: relative;
+  width: 210px;
+  height: 210px;
+}
+
+.page-loader__spoke {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 96px;
+  margin: -48px 0 0 -2.5px;
+  transform-origin: center;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.08); /* ink, faint groove */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.page-loader__dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #2563eb; /* acid.DEFAULT */
+  box-shadow: 0 0 0 5px rgba(37, 99, 235, 0.12);
+  animation: page-loader-sweep 2.8s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+/* The dot travels nearly the whole spoke length — a long radial sweep that
+   crosses past the shared center to the opposite side, not a small pulse —
+   so each spoke reads as its own shooting line, not a blur at the hub. */
+@keyframes page-loader-sweep {
+  0%,
+  100% {
+    transform: translateY(-40px);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateY(40px);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-loader__dot {
+    animation: none;
+    opacity: 1;
+  }
+}

@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { Plus } from "lucide-react";
 import { Eyebrow } from "./Ui.jsx";
 import Reveal from "./Reveal.jsx";
-import { faq } from "../data/content.js";
+import RevealText from "./motion/RevealText.jsx";
+import { useTranslations } from "../lib/LanguageContext.jsx";
 
 function FaqItem({ item, open, onToggle }) {
   return (
@@ -28,15 +29,17 @@ function FaqItem({ item, open, onToggle }) {
 }
 
 export default function Faq() {
+  const t = useTranslations();
+  const faq = t.faq.items;
   const [openIndex, setOpenIndex] = useState(null);
 
   return (
     <section id="faq" className="py-20">
       <Reveal>
-        <Eyebrow>FAQ</Eyebrow>
-        <h2 className="mt-4 font-display font-extrabold text-4xl md:text-5xl text-ink leading-[0.98]">
-          Des questions ?
-        </h2>
+        <Eyebrow>{t.faq.eyebrow}</Eyebrow>
+        <RevealText as="h2" className="mt-4 font-display font-extrabold text-4xl md:text-5xl text-ink leading-[0.98]">
+          {t.faq.title}
+        </RevealText>
       </Reveal>
 
       <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-4">

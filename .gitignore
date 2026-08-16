@@ -1,3 +1,21 @@
 node_modules
 dist
 .DS_Store
+
+# Vercel CLI project link (created by `vercel`/`vercel link`) — machine/account
+# specific, never shared.
+.vercel
+
+# Local env files — this project has none yet, but keep secrets out of git
+# the moment one shows up.
+.env
+.env.local
+.env.*.local
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+
+# Claude Code local settings (machine-specific permission grants, temp-path
+# references) — not part of the project.
+.claude/

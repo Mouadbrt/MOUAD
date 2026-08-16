@@ -1,0 +1,164 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "whatYouGet": "What you get",
+    "projects": "Projects",
+    "services": "Services",
+    "testimonials": "Testimonials",
+    "faq": "FAQ"
+  },
+  "common": {
+    "contactCta": "Contact me",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "chooseLanguage": "Choose language",
+    "availableLanguages": "Available languages",
+    "loading": "Loading",
+    "viewSite": "View site",
+    "tools": "Tools",
+    "toolsUsed": "Tools used",
+    "projectsLabel": "Projects",
+    "yearsExperienceLabel": "Years of experience"
+  },
+  "hero": {
+    "tagline": "Building things since 16",
+    "addPhoto": "Add your photo",
+    "dropPhoto": "Drop a portrait into public/assets/portrait.png"
+  },
+  "sidebar": {
+    "bio": "I work with you to deliver web platforms that combine speed, reliability, and well-thought-out data.",
+    "language": "Language"
+  },
+  "about": {
+    "eyebrow": "Start small, grow big",
+    "titleLine1": "About (&)",
+    "titleLine2": "My journey",
+    "bio": [
+      "Full-Stack Web Developer passionate about data and artificial intelligence. I design complete platforms — from frontend to backend — spanning interactive mapping, e-commerce, and automation.",
+      "Curious and results-driven, I like turning a business need into a clean, fast, maintainable application."
+    ],
+    "journey": [
+      {
+        "tag": "2024 — The beginnings",
+        "title": "From first code to Full-Stack",
+        "desc": "The web development journey begins with HTML, CSS, JavaScript, and PHP. Gradually, the first projects take shape and the interest in building complete applications grows."
+      },
+      {
+        "tag": "2025 — First experience",
+        "title": "Discovering the professional world",
+        "desc": "First professional immersion at ByteConnect, contributing to web projects and putting the knowledge gained in training into practice."
+      },
+      {
+        "tag": "2026 — Projects & field work",
+        "title": "Building for real needs",
+        "desc": "Development of more complete projects, notably Atlas de Meknès, a Web GIS platform combining mapping, data, APIs, and user management. An experience reinforced by an internship at the Meknès Prefecture."
+      },
+      {
+        "tag": "Today",
+        "title": "Full-Stack × Data × AI",
+        "desc": "Today, I combine web development, data, and artificial intelligence to design modern, useful, and scalable digital experiences."
+      }
+    ]
+  },
+  "whatYouGet": {
+    "eyebrow": "What you get",
+    "title": "What you get",
+    "items": [
+      { "title": "Websites & Landing Pages", "desc": "Modern, responsive websites designed to look professional and convert visitors into clients." },
+      { "title": "E-commerce", "desc": "Complete online stores with product management, responsive design, and a smooth shopping experience." },
+      { "title": "Custom Web Applications", "desc": "Tailored web applications built around your business needs, from dashboards to SaaS platforms." }
+    ]
+  },
+  "services": {
+    "eyebrow": "Services",
+    "titleLine1": "Solutions",
+    "titleLine2": "Simple & fair",
+    "subtitle": "Same rigor, same attention to detail. Only the scope changes.",
+    "mostChosen": "Most chosen",
+    "cta": "Choose this plan",
+    "waMessage": "Hi Mouad, I'm interested in the {plan} plan.",
+    "priceNote": "final price depends on complexity and requested features",
+    "steps": [
+      { "title": "First contact", "desc": "Initial conversation about the project, goals, and context." },
+      { "title": "Detailed brief", "desc": "Gathering requirements, content, and technical constraints." },
+      { "title": "Quote proposed", "desc": "Clear commercial proposal, tailored to the defined scope." },
+      { "title": "Validation", "desc": "Agreement on scope, budget, and delivery timeline." },
+      { "title": "Development", "desc": "Design, code, integration, testing — in tracked iterations." },
+      { "title": "Delivery & follow-up", "desc": "Going live, handover, and support after launch." }
+    ],
+    "plans": [
+      {
+        "name": "Ongoing support",
+        "period": "/ month",
+        "features": ["Website maintenance", "Bug fixes", "Small changes", "Performance optimization", "Technical support"]
+      },
+      {
+        "name": "Starter project",
+        "period": "starting at",
+        "features": ["Professional showcase site", "Responsive design", "Up to several pages", "Contact form", "Basic SEO optimization", "Going live"]
+      },
+      {
+        "name": "Custom project",
+        "period": "starting at",
+        "features": ["Custom web application", "Frontend + Backend", "Database", "Authentication & API", "Dashboard", "Deployment and configuration"]
+      }
+    ]
+  },
+  "projects": {
+    "eyebrow": "Selected work",
+    "titleLine1": "Built to last,",
+    "titleLine2": "made to perform",
+    "subtitle": "From showcase sites to a complete Web GIS platform, here's an overview of what I've delivered.",
+    "items": [
+      { "tag": "Web GIS", "desc": "A Web GIS platform for visualizing and managing Meknès's geographic data — administrative offices, municipalities, schools, and health centers, with authentication and user management." },
+      { "tag": "Website", "desc": "Modern, responsive website presenting the company's activity and products, with SEO structure and online deployment." },
+      { "tag": "E-commerce", "desc": "Digital identity and e-commerce experience for a modern clothing brand — visual identity, interface, product sheets, and Printify integration groundwork." },
+      { "tag": "Internship — Web Dev", "desc": "Professional web development experience: contributing to web projects and solutions, putting Full-Stack skills into practice in a professional environment." },
+      { "tag": "Python", "desc": "A trading bot built on an algorithmic strategy inspired by ICT / SMC — backtests, performance analysis, and parameter optimization." },
+      { "tag": "Full-Stack", "desc": "A modern professional portfolio showcasing skills, projects, experience, and web development services." }
+    ]
+  },
+  "testimonials": {
+    "eyebrow": "Testimonials",
+    "title": "What people say",
+    "items": [
+      { "quote": "Mouad turned a complex mapping requirement into a clean platform the whole team can actually use. Real precision work.", "name": "Karim El Amrani — GIS Project Lead" },
+      { "quote": "The site was delivered fast, with no compromise on quality. Our clients keep complimenting us on the new design.", "name": "Sophia Ndiaye — Marketing Manager" },
+      { "quote": "What I appreciate most is how clear the communication was. Every step was explained simply, no unnecessary jargon.", "name": "Yassine Benjelloun — Startup Founder" },
+      { "quote": "Our online store finally runs smoothly, and performance has improved noticeably since the redesign.", "name": "Laura Dubois — E-commerce Director" },
+      { "quote": "Responsive, thorough, and always gives good advice. Exactly the kind of developer you want to keep around long-term.", "name": "Omar Chraibi — Business Owner" },
+      { "quote": "The automated dashboard saves us real time every week. A genuine return on investment.", "name": "Nadia Berrada — Data Project Lead" },
+      { "quote": "Careful work from the first brief all the way to launch, with real attention to detail at every step.", "name": "Thomas Richard — Independent Consultant" }
+    ]
+  },
+  "faq": {
+    "eyebrow": "FAQ",
+    "title": "Got questions?",
+    "items": [
+      { "q": "Do you work with clients outside Morocco?", "a": "Yes — work happens remotely, by call and messaging, with regular progress updates regardless of the client's time zone." },
+      { "q": "What's the average turnaround for a showcase site?", "a": "Expect one to two weeks for a showcase site (Starter plan), and more depending on the number of pages and requested features." },
+      { "q": "Do you offer support after launch?", "a": "Yes, through the Ongoing Support plan: maintenance, bug fixes, small changes, and performance optimization, month by month." },
+      { "q": "Can I start with a small project before scaling up?", "a": "Absolutely — many projects start on the Starter plan and later grow into a custom project once the foundations are in place." },
+      { "q": "How does payment work?", "a": "A clear quote is provided after the detailed brief, with payment terms agreed before development begins." },
+      { "q": "Do you also do data and AI, or only web?", "a": "Both — from classic websites to platforms with interactive mapping, dashboards, and automation in Python." }
+    ]
+  },
+  "contact": {
+    "eyebrow": "Collaboration",
+    "title": "Got a web, data, or AI project in mind?",
+    "description": "Write to me and I'll help you build a tailored solution, from a showcase site to a full application with dashboard and API.",
+    "labels": {
+      "email": "Email",
+      "whatsapp": "WhatsApp",
+      "linkedin": "LinkedIn",
+      "github": "GitHub",
+      "instagram": "Instagram",
+      "twitter": "Twitter / X"
+    },
+    "valuePlaceholder": "To add"
+  },
+  "footer": {
+    "roleLine": "Full-Stack Web Developer & Data / AI"
+  }
+}

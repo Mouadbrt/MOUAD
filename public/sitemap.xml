@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Single-page site (all sections live on one URL, navigated via #anchors),
+  so there's exactly one entry here — that's correct for a sitemap, not a
+  placeholder for more.
+
+  Replace https://your-domain.vercel.app/ with your real deployed domain
+  (or custom domain, once you attach one) before submitting this in Google
+  Search Console. `xhtml:link` entries advertise the French/English/Spanish
+  versions to Google as alternates of the same URL, matching how the
+  language switcher actually works (no separate URL per language).
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://your-domain.vercel.app/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://your-domain.vercel.app/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://your-domain.vercel.app/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://your-domain.vercel.app/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://your-domain.vercel.app/" />
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>

@@ -1,32 +1,26 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { ArrowUpRight, Menu, X, ImageOff } from "lucide-react";
-import { profile, contact } from "../data/content.js";
-
-const NAV_LEFT = [
-  { label: "Accueil", href: "#hero" },
-  { label: "À propos", href: "#about" },
-  { label: "Projets", href: "#projects" },
-];
-const NAV_RIGHT = [
-  { label: "Ce que vous obtenez", href: "#what-you-get" },
-  { label: "Services", href: "#services" },
-  { label: "Clients", href: "#clients" },
-  { label: "FAQ", href: "#faq" },
-];
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { profile, contactLinks } from "../data/content.js";
+import { prefersReducedMotion, EASE, BREAKPOINTS } from "../lib/motionConfig.js";
+import { useTranslations } from "../lib/LanguageContext.jsx";
+import LanguageSwitcher from "./LanguageSwitcher.jsx";
 
 // Sidebar is desktop-only (hidden below lg) — on small screens this overlay
 // carries the same navigation plus a way to get in touch, so nothing is
 // lost, not just hidden behind a decorative button.
-function MobileMenu({ open, onClose }) {
+function MobileMenu({ open, onClose, navLeft, navRight, t }) {
   if (!open) return null;
-  const allLinks = [...NAV_LEFT, ...NAV_RIGHT];
+  const allLinks = [...navLeft, ...navRight];
   return (
     <div className="fixed inset-0 z-[100] bg-ink flex flex-col md:hidden">
       <div className="flex items-center justify-between px-6 pt-6">
         <span className="font-display text-sm font-bold text-paper">{profile.badge}</span>
         <button
           onClick={onClose}
-          aria-label="Fermer le menu"
+          aria-label={t.common.closeMenu}
           className="w-10 h-10 rounded-full border border-paper/40 flex items-center justify-center text-paper"
         >
           <X size={18} />
@@ -47,17 +41,17 @@ function MobileMenu({ open, onClose }) {
       </ul>
       <div className="px-6 pb-8 flex flex-col gap-3">
         <a
-          href={contact.email.href}
+          href={contactLinks.email.href}
           className="text-center rounded-full border border-paper/40 text-paper font-display text-xs font-bold uppercase tracking-widest px-6 py-3.5"
         >
-          {contact.email.href.replace("mailto:", "")}
+          {contactLinks.email.href.replace("mailto:", "")}
         </a>
         <a
           href="#contact"
           onClick={onClose}
           className="text-center rounded-full bg-acid text-ink font-display text-xs font-bold uppercase tracking-widest px-6 py-3.5"
         >
-          Me contacter
+          {t.common.contactCta}
         </a>
       </div>
     </div>
@@ -67,18 +61,14 @@ function MobileMenu({ open, onClose }) {
 // Drop your photo at public/assets/portrait.png (portrait crop, transparent
 // or plain background works best against the putty ground) — until then this
 // renders a placeholder so the layout still previews correctly.
-function Portrait() {
+function Portrait({ t }) {
   const [failed, setFailed] = useState(false);
   if (failed) {
     return (
       <div className="w-full h-full rounded-t-[3rem] bg-putty-card border border-ink/10 flex flex-col items-center justify-end gap-3 pb-10 text-center px-6">
         <ImageOff size={28} className="text-ink/60" />
-        <p className="font-display text-xs font-semibold uppercase tracking-widest text-ink/70">
-          Ajoutez votre photo
-        </p>
-        <p className="text-[11px] text-ink/70 max-w-[220px]">
-          Déposez un portrait dans public/assets/portrait.png
-        </p>
+        <p className="font-display text-xs font-semibold uppercase tracking-widest text-ink/70">{t.hero.addPhoto}</p>
+        <p className="text-[11px] text-ink/70 max-w-[220px]">{t.hero.dropPhoto}</p>
       </div>
     );
   }
@@ -94,63 +84,171 @@ function Portrait() {
 
 export default function Hero() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const reduced = prefersReducedMotion();
+  const t = useTranslations();
+
+  const navLeft = [
+    { label: t.nav.home, href: "#hero" },
+    { label: t.nav.about, href: "#about" },
+    { label: t.nav.projects, href: "#projects" },
+  ];
+  const navRight = [
+    { label: t.nav.whatYouGet, href: "#what-you-get" },
+    { label: t.nav.services, href: "#services" },
+    { label: t.nav.testimonials, href: "#testimonials" },
+    { label: t.nav.faq, href: "#faq" },
+  ];
+
+  // Refs for the Hero's distinct visual layers — each one gets its own
+  // timing/distance below so the scene reads as physical depth (a wordmark
+  // plane, a foreground subject, a UI chrome layer) instead of one flat
+  // block moving as a unit.
+  const pinRef = useRef(null);
+  const wordmarkRef = useRef(null);
+  const navRef = useRef(null);
+  const portraitWrapRef = useRef(null);
+  const badgeRef = useRef(null);
+
+  // ENTRANCE — runs once on mount. Wordmark settles in first, the portrait
+  // is revealed like a curtain rising from the bottom (clip-path, not a
+  // translate, so the image itself never shifts/distorts), nav fades in
+  // quickly after, and the badge arrives last with a small delay. No-ops
+  // under reduced motion — content simply renders in its final resting
+  // state, never hidden behind the animation.
+  useGSAP(
+    () => {
+      if (reduced || !pinRef.current) return;
+      const tl = gsap.timeline({ defaults: { ease: EASE.out } });
+      tl.from(wordmarkRef.current, { opacity: 0, y: 14, scale: 1.05, duration: 1 }, 0)
+        .fromTo(
+          portraitWrapRef.current,
+          { clipPath: "inset(100% 0% 0% 0%)", scale: 1.03 },
+          { clipPath: "inset(0% 0% 0% 0%)", scale: 1, duration: 1 },
+          0.15
+        )
+        .from(navRef.current.querySelectorAll("li, button"), { opacity: 0, y: -10, duration: 0.55, stagger: 0.05 }, 0.45)
+        .from(badgeRef.current, { opacity: 0, y: 18, duration: 0.7 }, 0.75);
+    },
+    { scope: pinRef, dependencies: [reduced] }
+  );
+
+  // SCROLL EXIT — the Hero sticks in place (`sticky top-0` below) for a bit
+  // of extra scroll room past its own height, courtesy of the wrapping div's
+  // taller height. Instead of just scrolling out of view, its layers drift
+  // apart at different speeds and dim while pinned; once that extra room
+  // runs out the section un-sticks and the next section's own content
+  // physically slides up over it — a real cinematic reveal rather than an
+  // opacity fade standing in for one. Note the pinned <section> itself is
+  // never transformed (only its children) — a transform on it would create
+  // a new containing block and break MobileMenu's fixed full-screen overlay.
+  // Intensity is toned down per breakpoint, same tiers Parallax.jsx uses.
+  useGSAP(
+    () => {
+      if (reduced || !pinRef.current) return;
+
+      function setup(intensity) {
+        const tl = gsap.timeline({
+          scrollTrigger: { trigger: pinRef.current, start: "top top", end: "bottom top", scrub: 0.6 },
+        });
+        tl.to(
+          // Background wordmark: the biggest, farthest layer — moves and
+          // scales the most, like a physical plane receding in space.
+          wordmarkRef.current,
+          { yPercent: -18 * intensity, scale: 1 + 0.14 * intensity, opacity: 1 - 0.55 * intensity, ease: "none" },
+          0
+        )
+          .to(
+            // Portrait: the foreground subject — only a gentle drift/scale
+            // so it never distorts, staying the visual anchor the longest.
+            portraitWrapRef.current,
+            { yPercent: -6 * intensity, scale: 1 - 0.08 * intensity, opacity: 1 - 0.35 * intensity, ease: "none" },
+            0
+          )
+          .to(navRef.current, { yPercent: -14 * intensity, opacity: 0, ease: "none" }, 0) // nav: gradual fade, gone well before the transition ends
+          .to(badgeRef.current, { yPercent: 18 * intensity, opacity: 0, ease: "none" }, 0); // badge: drifts opposite the wordmark, for variety
+        return tl;
+      }
+
+      ScrollTrigger.matchMedia({
+        [BREAKPOINTS.desktop]: () => setup(1),
+        [BREAKPOINTS.tablet]: () => setup(0.7),
+        [BREAKPOINTS.mobile]: () => setup(0.45),
+      });
+    },
+    { scope: pinRef, dependencies: [reduced] }
+  );
 
   return (
-    <section id="hero" className="relative min-h-[100svh] w-full overflow-hidden bg-putty">
-      <MobileMenu open={menuOpen} onClose={() => setMenuOpen(false)} />
-      {/* giant name wordmark — the page's own logo, filling the width */}
-      <span
-        aria-hidden="true"
-        className="absolute left-1/2 top-[3%] -translate-x-1/2 select-none pointer-events-none font-display font-extrabold uppercase whitespace-nowrap z-0 text-acid"
-        style={{ fontSize: "clamp(6rem, 19vw, 17rem)", letterSpacing: "-0.02em" }}
-      >
-        {profile.badge}
-      </span>
-
-      <nav className="relative z-40 flex items-center justify-between gap-4 px-6 md:px-10 pt-6 md:pt-8 font-display text-xs md:text-[13px] font-bold uppercase tracking-wide text-ink">
-        <ul className="hidden md:flex items-center gap-5">
-          {NAV_LEFT.map((item) => (
-            <li key={item.href}>
-              <a href={item.href} className="hover:text-ink/70 transition-colors">
-                {item.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-        <ul className="hidden md:flex items-center gap-5">
-          {NAV_RIGHT.map((item) => (
-            <li key={item.href}>
-              <a href={item.href} className="hover:text-ink/70 transition-colors">
-                {item.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-        <button
-          onClick={() => setMenuOpen(true)}
-          className="md:hidden ml-auto w-10 h-10 rounded-full border border-ink/50 flex items-center justify-center"
-          aria-label="Ouvrir le menu"
-          aria-expanded={menuOpen}
+    // Pin host — strictly for the scroll-exit animation above (extra scroll
+    // room for the Hero to stay stuck in place while its layers transition).
+    // At scroll position 0, or under reduced motion, this is visually a
+    // no-op: no extra height, no sticky, the section renders exactly as
+    // before.
+    <div ref={pinRef} className={reduced ? undefined : "relative h-[calc(100svh+24vh)] md:h-[calc(100svh+32vh)]"}>
+      <section id="hero" className={`w-full min-h-[100svh] overflow-hidden bg-putty ${reduced ? "relative" : "sticky top-0"}`}>
+        <MobileMenu open={menuOpen} onClose={() => setMenuOpen(false)} navLeft={navLeft} navRight={navRight} t={t} />
+        {/* giant name wordmark — the page's own logo, filling the width */}
+        <span
+          ref={wordmarkRef}
+          aria-hidden="true"
+          className="absolute left-1/2 top-[3%] -translate-x-1/2 select-none pointer-events-none font-display font-extrabold uppercase whitespace-nowrap z-0 text-acid"
+          style={{ fontSize: "clamp(6rem, 19vw, 17rem)", letterSpacing: "-0.02em" }}
         >
-          <Menu size={18} />
-        </button>
-      </nav>
-
-      {/* portrait, anchored to the bottom, the giant wordmark showing behind it */}
-      <div className="absolute z-10 left-1/2 -translate-x-1/2 bottom-0 h-[76%] md:h-[84%] w-[84%] sm:w-[64%] md:w-[46%] max-w-xl">
-        <div className="relative w-full h-full">
-          <Portrait />
-        </div>
-      </div>
-
-
-      {/* small floating credential badge, echoing the reference's partner badge */}
-      <div className="hidden lg:flex absolute z-20 right-10 bottom-[15%] items-center gap-2 rounded-2xl bg-ink text-paper px-4 py-3 shadow-[0_12px_30px_rgba(0,0,0,0.25)]">
-        <span className="w-2 h-2 rounded-full bg-acid shrink-0" />
-        <span className="font-display text-xs font-semibold">
-          {profile.projectsCount} projets livrés · {profile.yearsExperience} ans d'expérience
+          {profile.badge}
         </span>
-      </div>
-    </section>
+
+        <nav ref={navRef} className="relative z-40 flex items-center justify-between gap-4 px-6 md:px-10 pt-6 md:pt-8 font-display text-xs md:text-[13px] font-bold uppercase tracking-wide text-ink">
+          <ul className="hidden md:flex items-center gap-5">
+            {navLeft.map((item) => (
+              <li key={item.href}>
+                <a href={item.href} className="hover:text-ink/70 transition-colors">
+                  {item.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+          {/* navRight + switcher share one flex group (instead of the
+              switcher being its own justify-between segment) so it sits
+              right after FAQ on the same line, not stranded at the far edge. */}
+          <div className="flex items-center gap-5 ms-auto md:ms-0">
+            <ul className="hidden md:flex items-center gap-5">
+              {navRight.map((item) => (
+                <li key={item.href}>
+                  <a href={item.href} className="hover:text-ink/70 transition-colors">
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+            <LanguageSwitcher align="right" />
+            <button
+              onClick={() => setMenuOpen(true)}
+              className="md:hidden w-10 h-10 rounded-full border border-ink/50 flex items-center justify-center"
+              aria-label={t.common.openMenu}
+              aria-expanded={menuOpen}
+            >
+              <Menu size={18} />
+            </button>
+          </div>
+        </nav>
+
+        {/* portrait, anchored to the bottom, the giant wordmark showing behind it */}
+        <div ref={portraitWrapRef} className="absolute z-10 left-1/2 -translate-x-1/2 bottom-0 h-[76%] md:h-[84%] w-[84%] sm:w-[64%] md:w-[46%] max-w-xl">
+          <div className="relative w-full h-full">
+            <Portrait t={t} />
+          </div>
+        </div>
+
+
+
+        {/* small floating credential badge, echoing the reference's partner badge */}
+        <div ref={badgeRef} className="hidden lg:flex absolute z-20 end-10 bottom-[15%] items-center gap-2 rounded-2xl bg-ink text-paper px-4 py-3 shadow-[0_12px_30px_rgba(0,0,0,0.25)]">
+          <span className="w-2 h-2 rounded-full bg-acid shrink-0" />
+          <span className="font-display text-xs font-semibold">
+            {t.hero.tagline}
+          </span>
+        </div>
+      </section>
+    </div>
   );
 }

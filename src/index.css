@@ -2,8 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  /* Shared "premium" settle curve for plain CSS transitions (hover states
+     etc.) — kept in sync with EASE.out in src/lib/motionConfig.js so every
+     transition on the site, GSAP-driven or not, shares the same physics. */
+  --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Lenis (see src/components/motion/SmoothScroll.jsx) is now the scroll
+   engine and owns anchor-link easing — native smooth-scroll would just
+   fight it on browsers that also honor this. */
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
+}
+
+/* Custom cursor is mounted (desktop/fine-pointer, motion-safe only) — see
+   src/components/motion/Cursor.jsx. Native cursor stays untouched anywhere
+   the class isn't present (touch devices, reduced motion). */
+html.has-custom-cursor,
+html.has-custom-cursor a,
+html.has-custom-cursor button {
+  cursor: none;
 }
 
 /* Hex values below are hard-coded (not theme()) — Tailwind's CSS theme()
@@ -14,6 +33,15 @@ html {
 body {
   background-color: #eef2f7; /* putty.DEFAULT */
   color: #0f172a; /* ink.DEFAULT */
+  transition: opacity 0.28s var(--ease-premium);
+}
+
+/* Brief cross-fade on language change — see setLanguage in
+   src/lib/LanguageContext.jsx, which adds/removes this class around the
+   text swap. Motion-safe: LanguageContext itself skips adding the class
+   under prefers-reduced-motion, so this rule never fires there. */
+body.lang-transition {
+  opacity: 0.55;
 }
 
 ::selection {

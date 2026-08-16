@@ -1,41 +1,35 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { prefersReducedMotion, EASE } from "../lib/motionConfig.js";
 
-const prefersReducedMotion =
-  typeof window !== "undefined" && window.matchMedia
-    ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    : false;
-
-export default function Reveal({ children, className = "", delay = 0 }) {
+// Scroll-reveal on section entry — same public API as before (children,
+// className, delay) so every existing call-site keeps working unchanged;
+// internals now run on GSAP ScrollTrigger (Lenis-synced, shared easing)
+// instead of a bespoke IntersectionObserver. Gated behind
+// prefers-reduced-motion: with that preference set, content simply renders
+// in its final resting state — never hidden behind the animation.
+export default function Reveal({ children, className = "", delay = 0, y = 24 }) {
   const ref = useRef(null);
-  const [visible, setVisible] = useState(prefersReducedMotion);
+  const reduced = prefersReducedMotion();
 
-  useEffect(() => {
-    if (prefersReducedMotion) return;
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          obs.disconnect();
-        }
-      },
-      { threshold: 0.15 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
+  useGSAP(
+    () => {
+      if (reduced || !ref.current) return;
+      gsap.from(ref.current, {
+        opacity: 0,
+        y,
+        duration: 0.8,
+        ease: EASE.out,
+        delay: delay / 1000,
+        scrollTrigger: { trigger: ref.current, start: "top 88%", once: true },
+      });
+    },
+    { scope: ref, dependencies: [delay, y] }
+  );
 
   return (
-    <div
-      ref={ref}
-      className={className}
-      style={{
-        opacity: visible ? 1 : 0,
-        transform: visible ? "translateY(0)" : "translateY(24px)",
-        transition: prefersReducedMotion ? "none" : `opacity 0.7s ease ${delay}ms, transform 0.7s ease ${delay}ms`,
-      }}
-    >
+    <div ref={ref} className={className}>
       {children}
     </div>
   );

@@ -1,14 +1,20 @@
 import React from "react";
-import { Github, Linkedin, Mail, Instagram, Twitter } from "lucide-react";
+import { Github, Linkedin, Mail, Instagram, Twitter, MessageCircle } from "lucide-react";
 import { Eyebrow } from "./Ui.jsx";
 import Reveal from "./Reveal.jsx";
+import RevealText from "./motion/RevealText.jsx";
 import QrBlock from "./QrBlock.jsx";
-import { contact, profile } from "../data/content.js";
+import { contactLinks, profile } from "../data/content.js";
+import { useTranslations } from "../lib/LanguageContext.jsx";
 
-const ICONS = { email: Mail, linkedin: Linkedin, github: Github, instagram: Instagram, twitter: Twitter };
+const ICONS = { email: Mail, whatsapp: MessageCircle, linkedin: Linkedin, github: Github, instagram: Instagram, twitter: Twitter };
 
 export default function Contact() {
-  const entries = Object.entries(contact);
+  const t = useTranslations();
+  const entries = Object.entries(contactLinks).map(([key, link]) => [
+    key,
+    { ...link, label: t.contact.labels[key], value: t.contact.valuePlaceholder },
+  ]);
 
   return (
     <section id="contact" className="pb-16">
@@ -16,14 +22,11 @@ export default function Contact() {
         <div className="rounded-[2rem] bg-ink px-8 md:px-12 py-12 relative overflow-hidden">
           <div className="grid grid-cols-1 md:grid-cols-[1.4fr,1fr] gap-10 items-center">
             <div>
-              <Eyebrow dark>Collaboration</Eyebrow>
-              <h2 className="mt-4 font-display font-extrabold text-3xl md:text-4xl text-paper leading-tight">
-                Un projet web, data ou IA en tête ?
-              </h2>
-              <p className="mt-4 text-paper/60 leading-relaxed max-w-lg">
-                Écrivez-moi et je vous aide à construire une solution sur mesure, du site
-                vitrine à l'application complète avec dashboard et API.
-              </p>
+              <Eyebrow dark>{t.contact.eyebrow}</Eyebrow>
+              <RevealText as="h2" className="mt-4 font-display font-extrabold text-3xl md:text-4xl text-paper leading-tight">
+                {t.contact.title}
+              </RevealText>
+              <p className="mt-4 text-paper/60 leading-relaxed max-w-lg">{t.contact.description}</p>
 
               <div className="mt-8 flex flex-wrap gap-3">
                 {entries.map(([key, c]) => {
@@ -41,21 +44,12 @@ export default function Contact() {
                   );
                 })}
               </div>
-              <p className="mt-5 font-display text-[11px] text-paper/70">
-                * coordonnées à compléter avec vos liens réels dans src/data/content.js
-              </p>
             </div>
 
             <div className="flex flex-col items-center gap-6">
               <div className="flex gap-6">
-                <QrBlock label="linkedin" value={contact.linkedin.href} />
-                <QrBlock label="github" value={contact.github.href} />
               </div>
               <div className="flex items-center gap-3">
-                <span className="w-10 h-10 rounded-full bg-acid text-ink font-display text-xs font-extrabold flex items-center justify-center">
-                  MB
-                </span>
-                <span className="font-display italic text-paper/80 text-lg">{profile.signature}</span>
               </div>
             </div>
           </div>

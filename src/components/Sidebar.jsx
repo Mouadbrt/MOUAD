@@ -1,22 +1,47 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Home, MessageCircle, Briefcase, Layers, Zap, Users, HelpCircle, Github, Linkedin, Instagram, Copy, Check } from "lucide-react";
-import { profile, contact, tools } from "../data/content.js";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { useLenis } from "lenis/react";
+import { profile, contactLinks, tools } from "../data/content.js";
+import MagneticButton from "./motion/MagneticButton.jsx";
+import LogoLoop from "./motion/LogoLoop.jsx";
+import LanguageSwitcher from "./LanguageSwitcher.jsx";
+import { useTranslations } from "../lib/LanguageContext.jsx";
+import { prefersReducedMotion, EASE, STAGGER } from "../lib/motionConfig.js";
 
-const NAV = [
-  { id: "hero", label: "Accueil", icon: Home },
-  { id: "about", label: "À propos", icon: MessageCircle },
-  { id: "what-you-get", label: "Ce que vous obtenez", icon: Layers },
-  { id: "projects", label: "Projets", icon: Briefcase },
-  { id: "services", label: "Services", icon: Zap },
-  { id: "clients", label: "Clients", icon: Users },
-  { id: "faq", label: "FAQ", icon: HelpCircle },
+// id → icon, and id → the matching key in t.nav (labels are translated,
+// pulled in per-render inside the component below).
+const NAV_ITEMS = [
+  { id: "hero", icon: Home, navKey: "home" },
+  { id: "about", icon: MessageCircle, navKey: "about" },
+  { id: "what-you-get", icon: Layers, navKey: "whatYouGet" },
+  { id: "projects", icon: Briefcase, navKey: "projects" },
+  { id: "services", icon: Zap, navKey: "services" },
+  { id: "testimonials", icon: Users, navKey: "testimonials" },
+  { id: "faq", icon: HelpCircle, navKey: "faq" },
 ];
 
 const SOCIALS = [
-  { icon: Linkedin, href: contact.linkedin.href, label: "LinkedIn" },
-  { icon: Github, href: contact.github.href, label: "GitHub" },
-  { icon: Instagram, href: contact.instagram.href, label: "Instagram" },
+  { icon: Linkedin, href: contactLinks.linkedin.href, label: "LinkedIn" },
+  { icon: Github, href: contactLinks.github.href, label: "GitHub" },
+  { icon: Instagram, href: contactLinks.instagram.href, label: "Instagram" },
 ];
+
+// Tool names as LogoLoop "node" items — same pill styling as before, just
+// fed into the marquee instead of a static flex-wrap. Proper nouns
+// (tech/tool names), so not translated.
+const TOOL_LOGOS = tools.map((t) => ({
+  title: t,
+  node: (
+    <span
+      className="rounded-md bg-ink/5 text-ink/70 font-medium whitespace-nowrap"
+      style={{ fontSize: "clamp(9px, 1.2vh, 11px)", padding: "clamp(2px, 0.5vh, 4px) clamp(6px, 0.9vh, 8px)" }}
+    >
+      {t}
+    </span>
+  ),
+}));
 
 function useScrollSpy(ids) {
   const [active, setActive] = useState(ids[0]);
@@ -43,12 +68,16 @@ function useScrollSpy(ids) {
 }
 
 export default function Sidebar() {
+  const t = useTranslations();
+  const NAV = NAV_ITEMS.map((item) => ({ ...item, label: t.nav[item.navKey] }));
   const active = useScrollSpy(NAV.map((n) => n.id));
   const [copied, setCopied] = useState(false);
+  const asideRef = useRef(null);
+  const reduced = prefersReducedMotion();
 
   const copyEmail = async () => {
     try {
-      await navigator.clipboard.writeText(contact.email.href.replace("mailto:", ""));
+      await navigator.clipboard.writeText(contactLinks.email.href.replace("mailto:", ""));
       setCopied(true);
       setTimeout(() => setCopied(false), 1800);
     } catch {
@@ -56,8 +85,53 @@ export default function Sidebar() {
     }
   };
 
+  // "Waking up" entrance for the sidebar's own cards, matching the hero.
+  useGSAP(
+    () => {
+      if (reduced || !asideRef.current) return;
+      gsap.from(asideRef.current.children, {
+        opacity: 0,
+        y: 16,
+        duration: 0.7,
+        ease: EASE.out,
+        stagger: STAGGER.base,
+        delay: 0.15,
+      });
+    },
+    { scope: asideRef, dependencies: [reduced] }
+  );
+
+  // Subtle scroll-direction presence (brief §13/navbar behavior): a light
+  // dampening while scrolling down fast, restoring on scroll-up or once
+  // scrolling settles — never touches position/size, only opacity+scale.
+  const dampen = useRef(null);
+  useEffect(() => {
+    if (reduced || !asideRef.current) return;
+    dampen.current = {
+      opacity: gsap.quickTo(asideRef.current, "opacity", { duration: 0.5, ease: EASE.soft }),
+      // quickTo doesn't support the "scale" shorthand cleanly — drive
+      // scaleX/scaleY as a pair instead.
+      scaleX: gsap.quickTo(asideRef.current, "scaleX", { duration: 0.5, ease: EASE.soft }),
+      scaleY: gsap.quickTo(asideRef.current, "scaleY", { duration: 0.5, ease: EASE.soft }),
+    };
+    return () => {
+      gsap.set(asideRef.current, { opacity: 1, scaleX: 1, scaleY: 1 });
+      dampen.current = null;
+    };
+  }, [reduced]);
+
+  const onLenisScroll = useCallback((lenis) => {
+    if (!dampen.current) return;
+    const fast = lenis.direction === 1 && Math.abs(lenis.velocity) > 1.1;
+    dampen.current.opacity(fast ? 0.75 : 1);
+    dampen.current.scaleX(fast ? 0.985 : 1);
+    dampen.current.scaleY(fast ? 0.985 : 1);
+  }, []);
+  useLenis(reduced ? undefined : onLenisScroll, [reduced]);
+
   return (
     <aside
+      ref={asideRef}
       className="hidden lg:flex flex-col w-[280px] shrink-0 sticky self-start"
       style={{
         top: "clamp(10px, 2vh, 24px)",
@@ -95,30 +169,25 @@ export default function Sidebar() {
           </div>
         </div>
         <p className="leading-snug text-ink/70" style={{ fontSize: "clamp(10.5px, 1.5vh, 13px)" }}>
-          Je travaille avec vous pour livrer des plateformes web qui allient rapidité, fiabilité
-          et données bien pensées.
+          {t.sidebar.bio}
         </p>
       </div>
 
-      {/* Stats */}
+      {/* Language — `relative z-30` isn't decorative: the entrance stagger
+          above leaves every panel with its own inline transform (a stacking
+          context, even at rest), so without an explicit z-index here the
+          dropdown below would render under the later panels' own contexts
+          regardless of its own z-index. */}
       <div
-        className="rounded-2xl bg-putty-card border border-ink/10 flex items-center"
-        style={{ padding: "clamp(8px, 1.4vh, 16px)", gap: "clamp(12px, 2vh, 20px)" }}
+        className="relative z-30 rounded-2xl bg-putty-card border border-ink/10 flex items-center justify-between gap-2"
+        style={{ padding: "clamp(8px, 1.4vh, 14px) clamp(10px, 1.6vh, 16px)" }}
       >
-        <div className="flex-1 text-center">
-          <p className="font-display font-extrabold text-ink" style={{ fontSize: "clamp(15px, 2.2vh, 22px)" }}>
-            {profile.projectsCount}
-          </p>
-          <p className="text-ink/70" style={{ fontSize: "clamp(9px, 1.2vh, 11px)" }}>Projets</p>
-        </div>
-        <div className="w-px self-stretch bg-ink/10" />
-        <div className="flex-1 text-center">
-          <p className="font-display font-extrabold text-ink" style={{ fontSize: "clamp(15px, 2.2vh, 22px)" }}>
-            {profile.yearsExperience}+
-          </p>
-          <p className="text-ink/70" style={{ fontSize: "clamp(9px, 1.2vh, 11px)" }}>Ans d'expérience</p>
-        </div>
+        <span className="text-ink/70" style={{ fontSize: "clamp(10.5px, 1.5vh, 13px)" }}>
+          {t.sidebar.language}
+        </span>
+        <LanguageSwitcher align="right" />
       </div>
+
 
       {/* Nav */}
       <nav
@@ -153,19 +222,18 @@ export default function Sidebar() {
           className="font-display font-bold uppercase tracking-widest text-ink/70"
           style={{ fontSize: "clamp(8px, 1.1vh, 10px)", marginBottom: "clamp(4px, 0.8vh, 10px)" }}
         >
-          Outils
+          {t.common.tools}
         </p>
-        <div className="flex flex-wrap gap-1.5">
-          {tools.map((t) => (
-            <span
-              key={t}
-              className="rounded-md bg-ink/5 text-ink/70 font-medium"
-              style={{ fontSize: "clamp(9px, 1.2vh, 11px)", padding: "clamp(2px, 0.5vh, 4px) clamp(6px, 0.9vh, 8px)" }}
-            >
-              {t}
-            </span>
-          ))}
-        </div>
+        <LogoLoop
+          logos={TOOL_LOGOS}
+          speed={28}
+          gap={6}
+          logoHeight={18}
+          fadeOut
+          fadeOutColor="#e4ebf3"
+          pauseOnHover
+          ariaLabel={t.common.toolsUsed}
+        />
       </div>
 
       {/* Email */}
@@ -175,19 +243,21 @@ export default function Sidebar() {
         style={{ padding: "clamp(8px, 1.4vh, 14px) clamp(10px, 1.6vh, 16px)" }}
       >
         <span className="text-ink/70 truncate" style={{ fontSize: "clamp(10.5px, 1.5vh, 13px)" }}>
-          {contact.email.href.replace("mailto:", "")}
+          {contactLinks.email.href.replace("mailto:", "")}
         </span>
         {copied ? <Check size={13} className="text-ink/70 shrink-0" /> : <Copy size={13} className="text-ink/60 shrink-0" />}
       </button>
 
       {/* CTA */}
-      <a
-        href="#contact"
-        className="rounded-2xl bg-acid text-ink font-display font-extrabold text-center hover:bg-acid-dim transition-colors"
-        style={{ padding: "clamp(10px, 1.8vh, 16px)", fontSize: "clamp(12px, 1.7vh, 14px)" }}
-      >
-        Me contacter
-      </a>
+      <MagneticButton>
+        <a
+          href="#contact"
+          className="rounded-2xl bg-acid text-ink font-display font-extrabold text-center hover:bg-acid-dim transition-colors"
+          style={{ padding: "clamp(10px, 1.8vh, 16px)", fontSize: "clamp(12px, 1.7vh, 14px)" }}
+        >
+          {t.common.contactCta}
+        </a>
+      </MagneticButton>
     </aside>
   );
 }

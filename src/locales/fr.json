@@ -1,0 +1,164 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "about": "À propos",
+    "whatYouGet": "Ce que vous obtenez",
+    "projects": "Projets",
+    "services": "Services",
+    "testimonials": "Testimonials",
+    "faq": "FAQ"
+  },
+  "common": {
+    "contactCta": "Me contacter",
+    "openMenu": "Ouvrir le menu",
+    "closeMenu": "Fermer le menu",
+    "chooseLanguage": "Choisir la langue",
+    "availableLanguages": "Langues disponibles",
+    "loading": "Chargement",
+    "viewSite": "Voir le site",
+    "tools": "Outils",
+    "toolsUsed": "Outils utilisés",
+    "projectsLabel": "Projets",
+    "yearsExperienceLabel": "Ans d'expérience"
+  },
+  "hero": {
+    "tagline": "Je crée des projets depuis mes 16 ans",
+    "addPhoto": "Ajoutez votre photo",
+    "dropPhoto": "Déposez un portrait dans public/assets/portrait.png"
+  },
+  "sidebar": {
+    "bio": "Je travaille avec vous pour livrer des plateformes web qui allient rapidité, fiabilité et données bien pensées.",
+    "language": "Langue"
+  },
+  "about": {
+    "eyebrow": "Start small, grow big",
+    "titleLine1": "À propos (&)",
+    "titleLine2": "Mon parcours",
+    "bio": [
+      "Développeur Web Full-Stack passionné par la donnée et l'intelligence artificielle. Je conçois des plateformes complètes — du frontend au backend — en passant par la cartographie interactive, l'e-commerce et l'automatisation.",
+      "Curieux et orienté résultats, j'aime transformer un besoin métier en une application propre, rapide et maintenable."
+    ],
+    "journey": [
+      {
+        "tag": "2024 — Les débuts",
+        "title": "Du premier code au Full-Stack",
+        "desc": "Début du parcours en développement web avec le HTML, CSS, JavaScript et PHP. Progressivement, les premiers projets prennent forme et l'intérêt grandit pour la création d'applications complètes."
+      },
+      {
+        "tag": "2025 — Première expérience",
+        "title": "Découvrir le monde professionnel",
+        "desc": "Première immersion professionnelle chez ByteConnect, avec la participation à des projets web et la mise en pratique des connaissances acquises en formation."
+      },
+      {
+        "tag": "2026 — Projet & terrain",
+        "title": "Construire pour des besoins réels",
+        "desc": "Développement de projets plus complets, notamment Atlas de Meknès, une plateforme Web GIS combinant cartographie, données, API et gestion des utilisateurs. Une expérience renforcée par un stage à la Préfecture de Meknès."
+      },
+      {
+        "tag": "Aujourd'hui",
+        "title": "Full-Stack × Data × IA",
+        "desc": "Aujourd'hui, je combine développement web, données et intelligence artificielle pour concevoir des expériences digitales modernes, utiles et évolutives."
+      }
+    ]
+  },
+  "whatYouGet": {
+    "eyebrow": "What you get",
+    "title": "Ce que vous obtenez",
+    "items": [
+      { "title": "Sites web & Landing Pages", "desc": "Des sites web modernes et responsives, conçus pour paraître professionnels et convertir les visiteurs en clients." },
+      { "title": "E-commerce", "desc": "Des boutiques en ligne complètes avec gestion des produits, design responsive et une expérience d'achat fluide." },
+      { "title": "Applications web sur mesure", "desc": "Des applications web adaptées à vos besoins métier, des tableaux de bord aux plateformes SaaS." }
+    ]
+  },
+  "services": {
+    "eyebrow": "Services",
+    "titleLine1": "Solutions",
+    "titleLine2": "Simples & justes",
+    "subtitle": "Même exigence, même attention aux détails. Seul le périmètre change.",
+    "mostChosen": "Le plus choisi",
+    "cta": "Choisir ce plan",
+    "waMessage": "Bonjour Mouad, je suis intéressé(e) par l'offre {plan}.",
+    "priceNote": "prix final selon la complexité et les fonctionnalités demandées",
+    "steps": [
+      { "title": "Prise de contact", "desc": "Échange initial sur le projet, les objectifs et le contexte." },
+      { "title": "Brief détaillé", "desc": "Collecte des besoins, du contenu et des contraintes techniques." },
+      { "title": "Devis proposé", "desc": "Proposition commerciale claire, adaptée au périmètre défini." },
+      { "title": "Validation", "desc": "Accord sur le périmètre, le budget et le calendrier de livraison." },
+      { "title": "Développement", "desc": "Conception, code, intégration, tests — en itérations suivies." },
+      { "title": "Livraison & suivi", "desc": "Mise en ligne, passation, et support après lancement." }
+    ],
+    "plans": [
+      {
+        "name": "Support continu",
+        "period": "/ mois",
+        "features": ["Maintenance du site", "Corrections de bugs", "Petites modifications", "Optimisation des performances", "Support technique"]
+      },
+      {
+        "name": "Projet Starter",
+        "period": "à partir de",
+        "features": ["Site vitrine professionnel", "Design responsive", "Jusqu'à plusieurs pages", "Formulaire de contact", "Optimisation SEO de base", "Mise en ligne"]
+      },
+      {
+        "name": "Projet Custom",
+        "period": "à partir de",
+        "features": ["Application web personnalisée", "Frontend + Backend", "Base de données", "Authentification & API", "Dashboard", "Déploiement et configuration"]
+      }
+    ]
+  },
+  "projects": {
+    "eyebrow": "Selected work",
+    "titleLine1": "Construit pour durer,",
+    "titleLine2": "fait pour performer",
+    "subtitle": "Du site vitrine à la plateforme Web GIS complète, voici un aperçu de ce que j'ai livré.",
+    "items": [
+      { "tag": "Web GIS", "desc": "Plateforme Web GIS de visualisation et gestion des données géographiques de Meknès — annexes administratives, communes, écoles et centres de santé, avec authentification et gestion des utilisateurs." },
+      { "tag": "Site web", "desc": "Site web moderne et responsive présentant l'activité et les produits de l'entreprise, avec structure SEO et déploiement en ligne." },
+      { "tag": "E-commerce", "desc": "Identité digitale et expérience e-commerce d'une marque de vêtements moderne — identité visuelle, interface, fiches produits et préparation de l'intégration Printify." },
+      { "tag": "Stage — Dev Web", "desc": "Expérience professionnelle en développement web : participation à des projets et solutions web, mise en pratique du Full-Stack en environnement pro." },
+      { "tag": "Python", "desc": "Bot de trading basé sur une stratégie algorithmique inspirée de l'ICT / SMC — backtests, analyse des performances et optimisation des paramètres." },
+      { "tag": "Full-Stack", "desc": "Portfolio professionnel moderne présentant compétences, projets, expériences et services de développement web." }
+    ]
+  },
+  "testimonials": {
+    "eyebrow": "Testimonials",
+    "title": "Ce qu'on en dit",
+    "items": [
+      { "quote": "Mouad a transformé notre besoin de cartographie complexe en une plateforme claire et facile à utiliser pour toute l'équipe. Un vrai travail de précision.", "name": "Karim El Amrani — Chef de projet SIG" },
+      { "quote": "Le site a été livré rapidement, sans compromis sur la qualité. Nos clients nous félicitent régulièrement pour le nouveau design.", "name": "Sophia Ndiaye — Responsable marketing" },
+      { "quote": "Ce que j'apprécie le plus, c'est la clarté des échanges. Chaque étape était expliquée simplement, sans jargon technique inutile.", "name": "Yassine Benjelloun — Fondateur de startup" },
+      { "quote": "Notre boutique en ligne tourne enfin sans accroc, et les performances se sont nettement améliorées depuis la refonte.", "name": "Laura Dubois — Directrice e-commerce" },
+      { "quote": "Réactif, rigoureux et toujours de bon conseil. Exactement le genre de développeur qu'on veut garder sur le long terme.", "name": "Omar Chraibi — Gérant" },
+      { "quote": "Le tableau de bord automatisé nous fait gagner un temps précieux chaque semaine. Un vrai retour sur investissement.", "name": "Nadia Berrada — Cheffe de projet data" },
+      { "quote": "Un travail soigné du premier brief jusqu'à la mise en ligne, avec un vrai souci du détail à chaque étape.", "name": "Thomas Richard — Consultant indépendant" }
+    ]
+  },
+  "faq": {
+    "eyebrow": "FAQ",
+    "title": "Des questions ?",
+    "items": [
+      { "q": "Travaillez-vous avec des clients en dehors du Maroc ?", "a": "Oui — le travail se fait à distance, par appel et messagerie, avec des points d'avancement réguliers quel que soit le fuseau horaire du client." },
+      { "q": "Quel est le délai moyen pour un site vitrine ?", "a": "Comptez une à deux semaines pour un site vitrine (formule Starter), et davantage selon le nombre de pages et les fonctionnalités demandées." },
+      { "q": "Proposez-vous un support après la mise en ligne ?", "a": "Oui, via la formule Support continu : maintenance, corrections de bugs, petites modifications et optimisation des performances, mois par mois." },
+      { "q": "Puis-je démarrer avec un petit projet avant de voir plus grand ?", "a": "Tout à fait — beaucoup de projets démarrent en formule Starter et évoluent ensuite vers un projet sur-mesure une fois les bases posées." },
+      { "q": "Comment se déroule le paiement ?", "a": "Un devis clair est proposé après le brief détaillé, avec les modalités de paiement convenues avant le démarrage du développement." },
+      { "q": "Faites-vous aussi de la data et de l'IA, ou uniquement du web ?", "a": "Les deux — du site web classique aux plateformes avec cartographie interactive, dashboards et automatisation en Python." }
+    ]
+  },
+  "contact": {
+    "eyebrow": "Collaboration",
+    "title": "Un projet web, data ou IA en tête ?",
+    "description": "Écrivez-moi et je vous aide à construire une solution sur mesure, du site vitrine à l'application complète avec dashboard et API.",
+    "labels": {
+      "email": "Email",
+      "whatsapp": "WhatsApp",
+      "linkedin": "LinkedIn",
+      "github": "GitHub",
+      "instagram": "Instagram",
+      "twitter": "Twitter / X"
+    },
+    "valuePlaceholder": "À ajouter"
+  },
+  "footer": {
+    "roleLine": "Développeur Web Full-Stack & Data / AI"
+  }
+}
