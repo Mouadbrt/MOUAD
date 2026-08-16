@@ -207,7 +207,15 @@ export default function Hero() {
           {profile.badge}
         </span>
 
-        <nav ref={navRef} className="relative z-40 flex items-center justify-between gap-4 px-6 md:px-10 pt-6 md:pt-8 font-display text-xs md:text-[13px] font-bold uppercase tracking-wide text-ink">
+        {/* Below `sm` the nav is pulled out of normal flow entirely — it floats
+            top-right (`absolute`) instead of occupying its own full-width row,
+            so it can never push the wordmark/portrait down or add vertical
+            space of its own. `sm` and up restore the original in-flow row
+            (`relative`, full-width, padded) untouched. `justify-between` only
+            still applies at `sm`+ too, since below that `navLeft`'s `<ul>` is
+            `hidden` anyway (nothing to justify against — it was already a
+            no-op below `md`, just made explicit now). */}
+        <nav ref={navRef} className="absolute top-6 end-6 flex items-center gap-4 z-40 font-display text-xs md:text-[13px] font-bold uppercase tracking-wide text-ink sm:relative sm:top-auto sm:end-auto sm:justify-between sm:px-6 md:px-10 sm:pt-6 md:pt-8">
           <ul className="hidden md:flex items-center gap-5">
             {navLeft.map((item) => (
               <li key={item.href}>
