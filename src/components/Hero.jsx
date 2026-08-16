@@ -194,8 +194,8 @@ export default function Hero() {
     // than viewport-filling, so a `vh`-scaled add-on here would reintroduce
     // a growing blank gap under the portrait on tall phones; `sm`/`md` are
     // unchanged.
-    <div ref={pinRef} className={reduced ? undefined : "relative h-[calc(18.5rem+84vw+3rem)] sm:h-[calc(100svh+24vh)] md:h-[calc(100svh+32vh)]"}>
-      <section id="hero" className={`w-full min-h-[calc(18.5rem+84vw)] sm:min-h-[100svh] overflow-hidden bg-putty ${reduced ? "relative" : "sticky top-0"}`}>
+    <div ref={pinRef} className={reduced ? undefined : "relative h-[calc(7.75rem+84vw+3rem)] sm:h-[calc(100svh+24vh)] md:h-[calc(100svh+32vh)]"}>
+      <section id="hero" className={`w-full min-h-[calc(7.75rem+84vw)] sm:min-h-[100svh] overflow-hidden bg-putty ${reduced ? "relative" : "sticky top-0"}`}>
         <MobileMenu open={menuOpen} onClose={() => setMenuOpen(false)} navLeft={navLeft} navRight={navRight} t={t} />
         {/* giant name wordmark — the page's own logo, filling the width */}
         <span
@@ -242,26 +242,29 @@ export default function Hero() {
           </div>
         </nav>
 
-        {/* portrait, anchored to the bottom, the giant wordmark showing behind it.
-            Below `sm` the box is auto-height (width-driven, matching the photo's
-            own aspect ratio) so the entire image stays visible, never cropped —
-            sm and up keep the original fixed-height, object-cover box untouched.
+        {/* portrait, anchored to the bottom, the giant wordmark showing behind it —
+            literally: the wordmark is `z-0`, this wrapper is `z-10`, and below
+            `sm` its `top` is pulled up onto the wordmark's lower half on purpose,
+            so the photo's box overlaps and hides that part of the letters rather
+            than sitting underneath them as a separate, non-overlapping block.
+            The wordmark's own top portion stays visible above the image, same
+            silhouette as the desktop composition. Below `sm` the box is also
+            auto-height (width-driven, matching the photo's own aspect ratio) so
+            the entire image stays visible, never cropped — sm and up keep the
+            original fixed-height, object-cover box untouched.
 
             Below `sm` the whole composition is content-sized instead of forced
-            into a full `100svh` section. The source photo is square, so its
-            rendered height is purely `84vw` (width-driven), independent of the
-            phone's height — a fixed `top` offset (clearing the wordmark, whose
-            own font-size is pinned at its `6rem` floor everywhere below `sm`)
-            plus that `84vw` box height plus a small fixed margin is exactly
-            the section's `min-h` below. That keeps a small, constant gap
-            above AND below the portrait on every phone — short phones just
-            end up with a shorter section (the next one starts sooner), tall
-            phones a taller one — instead of stretching a leftover gap to
-            fill whatever `100svh` happens to be. `sm` and up are untouched
-            (still the original bottom-anchored, viewport-filling box). */}
+            into a full `100svh` section: the wordmark's font-size is pinned at
+            its `6rem` floor everywhere below `sm`, so its own rendered height is
+            effectively constant, and the portrait's height is purely `84vw`
+            (it's a square photo) — so a fixed `top` offset (deep enough into the
+            wordmark's own box to read as an overlap) plus that `84vw` height
+            plus a small fixed margin is exactly the section's `min-h` below.
+            `sm` and up are untouched (still the original bottom-anchored,
+            viewport-filling box). */}
         <div
           ref={portraitWrapRef}
-          className="absolute z-10 left-1/2 -translate-x-1/2 top-[16.75rem] sm:top-auto sm:bottom-0 h-auto sm:h-[76%] md:h-[84%] w-[84%] sm:w-[64%] md:w-[46%] max-w-xl"
+          className="absolute z-10 left-1/2 -translate-x-1/2 top-24 sm:top-auto sm:bottom-0 h-auto sm:h-[76%] md:h-[84%] w-[84%] sm:w-[64%] md:w-[46%] max-w-xl"
         >
           <div className="relative w-full h-auto sm:h-full">
             <Portrait t={t} />
