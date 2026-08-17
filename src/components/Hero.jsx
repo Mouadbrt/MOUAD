@@ -193,17 +193,13 @@ export default function Hero() {
     // `100svh` at every size now, so there's no mobile-specific formula to
     // keep in sync with here anymore.
     <div ref={pinRef} className={reduced ? undefined : "relative h-[calc(100svh+24vh)] md:h-[calc(100svh+32vh)]"}>
-      <section id="hero" className={`w-full min-h-[100svh] overflow-hidden bg-putty ${reduced ? "relative" : "sticky top-0"}`}>
+      <section
+        id="hero"
+        className={`w-full min-h-[100svh] overflow-hidden bg-putty flex flex-col items-center justify-center sm:block ${
+          reduced ? "relative" : "sticky top-0"
+        }`}
+      >
         <MobileMenu open={menuOpen} onClose={() => setMenuOpen(false)} navLeft={navLeft} navRight={navRight} t={t} />
-        {/* giant name wordmark — the page's own logo, filling the width */}
-        <span
-          ref={wordmarkRef}
-          aria-hidden="true"
-          className="absolute left-1/2 top-[3%] -translate-x-1/2 select-none pointer-events-none font-display font-extrabold uppercase whitespace-nowrap z-0 text-acid"
-          style={{ fontSize: "clamp(6rem, 19vw, 17rem)", letterSpacing: "-0.02em" }}
-        >
-          {profile.badge}
-        </span>
 
         {/* Below `sm` the nav is pulled out of normal flow entirely — it floats
             top-right (`absolute`) instead of occupying its own full-width row,
@@ -248,38 +244,58 @@ export default function Hero() {
           </div>
         </nav>
 
-        {/* portrait, anchored to the bottom, the giant wordmark showing behind it —
-            literally: the wordmark is `z-0`, this wrapper is `z-10`, and below
-            `sm` its `top` is pulled up onto the wordmark's lower half on purpose,
-            so the photo's box overlaps and hides most of that part of the
-            letters rather than sitting underneath them as a separate,
-            non-overlapping block. The wordmark's own top sliver stays visible
-            above the image, same silhouette as the desktop composition. Below
-            `sm` the box is also auto-height (width-driven, matching the
-            photo's own aspect ratio) so the entire image stays visible, never
-            cropped — sm and up keep the original fixed-height, object-cover
-            box untouched.
+        {/* Composition wrapper — wordmark + portrait share ONE `relative` box
+            so they read as a single unit instead of two independently-placed
+            layers. Below `sm` this box has a real, deliberately-computed
+            height (`top offset of the portrait` + `the portrait's own
+            height`, both used again just below) and is the section's only
+            normal-flow child, so the section's `flex items-center
+            justify-center` (above) centers this whole unit — wordmark,
+            overlap and all — vertically in the `100svh` viewport, instead of
+            it sitting stuck at the top with the leftover room dumped below.
+            `sm` and up: `sm:contents` makes this wrapper generate no box of
+            its own at all, so the wordmark/portrait fall through to be
+            direct children of `<section>` again — byte-for-byte the original
+            sm+ positioning (relative to the section, bottom-anchored),
+            completely untouched. */}
+        <div className="relative w-full h-[calc(4rem+90vw)] sm:contents">
+          {/* giant name wordmark — the page's own logo, filling the width */}
+          <span
+            ref={wordmarkRef}
+            aria-hidden="true"
+            className="absolute left-1/2 top-0 -translate-x-1/2 select-none pointer-events-none font-display font-extrabold uppercase whitespace-nowrap z-0 text-acid sm:top-[3%]"
+            style={{ fontSize: "clamp(6rem, 19vw, 17rem)", letterSpacing: "-0.02em" }}
+          >
+            {profile.badge}
+          </span>
 
-            NOTE on the source photo itself: it's a perfectly square PNG
-            (1254×1254 — confirmed from the file, and it's cropped tight to
-            that square already, essentially no spare transparent margin to
-            trim). Capped at 90vw wide, its rendered height is therefore also
-            only ~90vw — on a ~390×844 phone that's ~350px tall, well short of
-            the ~700px of vertical room between "overlapping the wordmark" and
-            "touching the very bottom of a `100svh` section". There's no
-            layout trick that makes a square image span both at once here, so
-            this keeps the overlap (the priority — the image starts high,
-            overlapping most of the wordmark's height) and accepts that it
-            can't also reach the section's bottom edge without cropping,
-            stretching, or exceeding the width cap — all explicitly ruled out.
-            The leftover is `bg-putty` — the Hero's own background, not the
-            next section bleeding in, since the section is a full `100svh`. */}
-        <div
-          ref={portraitWrapRef}
-          className="absolute z-10 left-1/2 -translate-x-1/2 top-16 sm:top-auto sm:bottom-0 h-auto sm:h-[76%] md:h-[84%] w-[90%] sm:w-[64%] md:w-[46%] max-w-xl"
-        >
-          <div className="relative w-full h-auto sm:h-full">
-            <Portrait t={t} />
+          {/* portrait, anchored to the bottom, the giant wordmark showing behind it —
+              literally: the wordmark is `z-0`, this wrapper is `z-10`, and below
+              `sm` its `top` is pulled up onto the wordmark's lower half on purpose,
+              so the photo's box overlaps and hides most of that part of the
+              letters rather than sitting underneath them as a separate,
+              non-overlapping block. The wordmark's own top sliver stays visible
+              above the image, same silhouette as the desktop composition. Below
+              `sm` the box is also auto-height (width-driven, matching the
+              photo's own aspect ratio) so the entire image stays visible, never
+              cropped — sm and up keep the original fixed-height, object-cover
+              box untouched.
+
+              NOTE on the source photo itself: it's a perfectly square PNG
+              (1254×1254 — confirmed from the file, and it's cropped tight to
+              that square already, essentially no spare transparent margin to
+              trim). Capped at 90vw wide, its rendered height is therefore also
+              only ~90vw. Combined with the `top-16` overlap offset, that's
+              exactly the `h-[calc(4rem+90vw)]` on the wrapper above — this
+              box is sized to its own content on purpose, so centering it
+              doesn't leave a phantom gap the size of the overlap. */}
+          <div
+            ref={portraitWrapRef}
+            className="absolute z-10 left-1/2 -translate-x-1/2 top-16 sm:top-auto sm:bottom-0 h-auto sm:h-[76%] md:h-[84%] w-[90%] sm:w-[64%] md:w-[46%] max-w-xl"
+          >
+            <div className="relative w-full h-auto sm:h-full">
+              <Portrait t={t} />
+            </div>
           </div>
         </div>
 
